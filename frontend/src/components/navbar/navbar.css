@@ -1,0 +1,17 @@
+.navbar {
+  display: flex;
+  height: 50px;
+  background: aliceblue;
+  align-items: center;
+}
+
+.item1 {
+  flex: 8;
+  font-weight: bold;
+  padding-left: 30px;
+}
+
+.item2,
+.item3 {
+  flex: 1;
+}

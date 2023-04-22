@@ -1,0 +1,48 @@
+.form {
+  width: 30%;
+  margin: 0px auto;
+  background: #f6f5f7;
+}
+
+button {
+  border-radius: 20px;
+  border: 1px solid #ff4b2b;
+  background-color: #ff4b2b;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  /* transition: transform 80ms ease-in; */
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+button:focus {
+  outline: none;
+}
+
+button.ghost {
+  background-color: transparent;
+  border-color: #ffffff;
+}
+
+.login-form-input input {
+  background-color: #eee;
+  border: none;
+  padding: 12px 15px;
+  margin: 8px 0;
+  width: 60%;
+}
+
+.login-form-heading {
+  font-weight: bold;
+}
+
+.login-form-heading,
+.login-form-input {
+  text-align: center;
+}
