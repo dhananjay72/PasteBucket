@@ -24,7 +24,7 @@ const getUniqueId = () => {
 // Create new dump
 // Partially done
 router.post("/", async (req, res) => {
-  const { title, text, password, access, expiration_date } = req.body;
+  const { title, text, password, access, expiration_date, user } = req.body;
 
   let dump = {};
   dump.text = text;
@@ -35,10 +35,11 @@ router.post("/", async (req, res) => {
     dump.expiration_date = expiration_date;
   }
 
-  // console.log("hello from post route");
+  // console.log("hello from post route", req.body);
   try {
-    if (req.user) {
-      dump.user = req.user.id;
+    if (user) {
+      // console.log("I am executing");
+      dump.user = user;
     } else {
       dump.user = process.env.DEFAULT_USER_ID;
     }
