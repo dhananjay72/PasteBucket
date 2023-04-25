@@ -22,8 +22,10 @@ const getUniqueId = () => {
 };
 
 // Create new dump
-// Partially done
+// Testing done, able to post from the frontend
 router.post("/", async (req, res) => {
+  console.log(req.body);
+
   const { title, text, password, access, expiration_date, user } = req.body;
 
   let dump = {};
@@ -55,6 +57,7 @@ router.post("/", async (req, res) => {
     dump.slug = id;
 
     dump = await Dump.create(dump);
+    console.log(dump);
     res.json({ dump });
   } catch (error) {
     console.log(error);
@@ -107,24 +110,25 @@ router.get("/", auth, async (req, res) => {
 });
 
 // Delete dump:
-// testing pending;
+// testing done from frontend, need to do some changes;
 
 router.delete("/:id", auth, async (req, res) => {
   try {
-    const dump = await Dump.findById(req.params.id);
+    console.log(req.params.id);
+    const dump = await Dump.findOne({ slug: req.params.id });
 
     if (!dump) {
       return res.status(404).json({ msg: "Dump not found" });
     }
 
-    if (dump.user.toString() !== req.user.id) {
-      if (dump.access === "PVT") {
-        return res.status(404).json({ msg: "Dump not found" });
-      }
-      return res.status(401).json({ msg: "You cannot delete the dump" });
-    }
-
-    await dump.remove();
+    console.log(dump.user.toString(), req.user.id);
+    // if (dump.user.toString() !== req.user.id) {
+    //   if (dump.access === "PVT") {
+    //     return res.status(404).json({ msg: "Dump not found" });
+    //   }
+    //   return res.status(401).json({ msg: "You cannot delete the dump" });
+    // }
+    await Dump.findOneAndDelete({ slug: req.params.id });
     console.log("deleted");
     return res.json({ msg: "post deleted" });
   } catch (err) {

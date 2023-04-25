@@ -1,9 +1,11 @@
 const jwt = require("jsonwebtoken");
+const user = require("../models/user");
 
 module.exports = function (req, res, next) {
   // Get token from header
-  const token = req.header("x-auth-token");
 
+  const token = req.header("x-auth-token");
+  // console.log(token);
   if (!token) {
     return res
       .status(401)
@@ -19,6 +21,7 @@ module.exports = function (req, res, next) {
           .json({ errors: [{ msg: "Token is not valid" }] });
       } else {
         req.user = decoded.user;
+        console.log(decoded.user);
         next();
       }
     });

@@ -35,6 +35,7 @@ export const userSlice = createSlice({
     },
     logout: (state) => {
       //  to add logic for userlogout
+      localStorage.removeItem("jwToken");
     },
   },
 });
