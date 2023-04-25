@@ -8,11 +8,11 @@ import "./login.css";
 
 const Login = () => {
   const navigate = useNavigate();
-  useEffect(() => {
-    if (localStorage.getItem("jwToken")) {
-      navigate("/dashboard");
-    }
-  });
+  // useEffect(() => {
+  //   if (localStorage.getItem("jwToken")) {
+  //     navigate("/dashboard");
+  //   }
+  // });
 
   const dispatch = useDispatch();
 

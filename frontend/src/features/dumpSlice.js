@@ -46,7 +46,7 @@ export const dumpSlice = createSlice({
           "X-Auth-Token": localStorage.getItem("jwToken"),
         },
       });
-      console.log(res.data.msg);
+      console.log(res.data);
     },
     getDump: (state, { payload }) => {},
   },

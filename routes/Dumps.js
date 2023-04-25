@@ -102,7 +102,7 @@ router.get("/", auth, async (req, res) => {
     if (!dumps) {
       return res.status(404).json({ errors: { msg: "Dump not found" } });
     }
-    return res.json(dumps);
+    return res.json({ user: req.user.id, dumps });
   } catch (err) {
     console.error(err.message);
     return res.status(500).json({ msg: "Server Error" });
