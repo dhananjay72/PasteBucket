@@ -7,6 +7,7 @@ const User = require("../models/user");
 const router = express.Router();
 
 // Route to register user:
+// Testing done, able to register user from frontend
 router.post("/", async (req, res) => {
   try {
     const { username, email, password } = req.body;

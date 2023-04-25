@@ -37,9 +37,26 @@ export const userSlice = createSlice({
       //  to add logic for userlogout
       localStorage.removeItem("jwToken");
     },
+
+    loaduser: (state) => {},
+    registerUser: async (state, { payload }) => {
+      const { username, email, password } = payload.input;
+      // console.log(email);
+
+      try {
+        const res = await axios.post("api/users", {
+          username,
+          email,
+          password,
+        });
+        console.log(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, loaduser, registerUser } = userSlice.actions;
 
 export default userSlice.reducer;
