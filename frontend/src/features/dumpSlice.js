@@ -18,15 +18,16 @@ export const dumpSlice = createSlice({
   reducers: {
     postDump: async (state, { payload }) => {
       const { title, description, access, date } = payload.dumpInput;
+      console.log(payload.User);
+      console.log(payload.dumpInput);
 
       const dump = {
         title,
         text: description,
         expiration_date: date,
         access,
-        user: null,
+        user: payload.User,
       };
-
       console.log(dump);
 
       const res = await axios.post("/api/d", { ...dump });

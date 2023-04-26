@@ -1,11 +1,11 @@
 // State storing loggedin user information
 import axios from "axios";
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { redirect } from "react-router-dom";
 
 const initialState = {
   isAuthenticated: false,
-  username: "sdfsdf",
+  username: "",
   email: null,
   jwt: null,
   dumps: [],
@@ -27,111 +27,86 @@ export const login = createAsyncThunk("user/login", async (payload) => {
   return { isAuthenticated: true, username: Username, email: Email, dumps };
 });
 
+export const registerUser = createAsyncThunk(
+  "user/register",
+  async (payload) => {
+    const { username, email, password } = payload.input;
+    const res = await axios.post("api/users", {
+      username,
+      email,
+      password,
+    });
+
+    return res.data;
+  }
+);
+
+export const loaduser = createAsyncThunk("user/info", async (payload) => {
+  console.log("hello ");
+  const token = localStorage.getItem("jwToken");
+
+  const res = await axios.get("/api/d", {
+    headers: {
+      "X-Auth-Token": token,
+    },
+  });
+  // console.log(res.data);
+  const { user, dumps } = res.data;
+
+  return { user, dumps };
+  // return res;
+});
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    // login: async (state, { payload }) => {
-    //   // alert("je");
-    //   // state.isAuthenticated = true;
-    //   try {
-    //     const { email, password } = payload.input;
-
-    //     const res = await axios.post("/api/auth", {
-    //       email,
-    //       password,
-    //     });
-    //     console.log(res.data);
-
-    //     const Email = res.data.user.email;
-    //     const Username = res.data.user.username;
-
-    //     const token = res.data.token;
-    //     let dumps = res.data.dumps;
-    //     // console.log(state);
-    //     console.log(Email, Username, token, dumps);
-    //     state.isAuthenticated = true;
-    //     state.username = Username;
-    //     state.email = Email;
-    //     state.dumps = [...dumps];
-    //     localStorage.setItem("jwToken", token);
-    //     state.cnt += 1;
-    //     console.log(state);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // },
-    // logout: (state) => {
-    //   //  to add logic for userlogout
-    //   localStorage.removeItem("jwToken");
-    // },
-
     inc: (state) => {
       state.cnt += 1;
       state.isAuthenticated = true;
     },
 
-    loaduser: async (state) => {
-      const token = localStorage.getItem("jwToken");
-
-      try {
-        const res = await axios.gey("/d", {
-          headers: {
-            "X-Auth-Token": localStorage.getItem("jwToken"),
-          },
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    // Register user with email, username, password
-    registerUser: async (state, { payload }) => {
-      const { username, email, password } = payload.input;
-      // console.log(email);
-
-      try {
-        const res = await axios.post("api/users", {
-          username,
-          email,
-          password,
-        });
-        console.log(res.data);
-      } catch (error) {
-        console.log(error);
-      }
+    logout: (state) => {
+      localStorage.removeItem("jwToken");
+      state.isAuthenticated = false;
+      state.username = "";
+      state.email = null;
+      state.jwt = null;
+      state.dumps = [];
     },
   },
-  // extrareducers: (builder) => {
-  //   builder
-  //     .addCase(login.fulfilled, (state, action) => {
-  //       console.log("fulfill");
-  //       state.isAuthenticated = action.payload.isAuthenticated;
-  //       state.username = action.payload.username;
-  //       state.email = action.payload.email;
-  //       state.dumps = action.payload.dumps;
-  //       state.cnt += 1;
-  //     })
-  //     .addCase(login.rejected, (state) => {
-  //       console.log("rej");
-  //       state.isAuthenticated = false;
-  //       state.username = null;
-  //       state.email = null;
-  //       state.dumps = [];
-  //     });
-  // },
 
   extraReducers: {
     [login.fulfilled]: (state, action) => {
+      console.log(action.payload);
       state.isAuthenticated = action.payload.isAuthenticated;
       state.username = action.payload.username;
       state.email = action.payload.email;
       state.dumps = action.payload.dumps;
       state.cnt += 1;
     },
+    [registerUser.fulfilled]: (state, action) => {
+      console.log("registration successful");
+      // console.log(action.payload);
+      state.username = action.payload.user.username;
+      state.email = action.payload.user.email;
+      state.isAuthenticated = true;
+      const token = action.payload.Token;
+      localStorage.setItem("jwToken", token);
+    },
+
+    [loaduser.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      console.log("is getting executed");
+      console.log(action.payload.user);
+      state.username = action.payload.user;
+
+      state.dumps = [...action.payload.dumps];
+      state.isAuthenticated = true;
+    },
   },
 });
 
-export const { logout, loaduser, registerUser, inc } = userSlice.actions;
+export const { logout, inc } = userSlice.actions;
 
 export default userSlice.reducer;

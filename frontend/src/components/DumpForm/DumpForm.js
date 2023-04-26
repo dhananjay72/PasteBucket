@@ -1,9 +1,21 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { postDump, deleteDump } from "../../features/dumpSlice";
+import { loaduser } from "../../features/userSlice";
 import "./DumpForm.css";
 
 const DumpForm = () => {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+
+  const User = useSelector((state) => state.user.username);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      dispatch(loaduser());
+    }
+  });
+
   const [dumpInput, setDumpInput] = useState({
     title: "",
     description: "",
@@ -17,8 +29,6 @@ const DumpForm = () => {
     setDumpInput({ ...dumpInput, [name]: value });
     // console.log(dumpInput);
   };
-
-  const dispatch = useDispatch();
 
   return (
     <div className="dumpform-container">
@@ -65,7 +75,7 @@ const DumpForm = () => {
           </div>
         </div>
         <div>
-          <button onClick={() => dispatch(postDump({ dumpInput }))}>
+          <button onClick={() => dispatch(postDump({ dumpInput, User }))}>
             Post
           </button>
           <button onClick={() => dispatch(deleteDump({ id: "bKFobi" }))}>

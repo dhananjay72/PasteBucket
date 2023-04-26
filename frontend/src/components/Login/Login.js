@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../features/userSlice";
 import { Link } from "react-router-dom";
 import { redirect, useNavigate } from "react-router-dom";
@@ -8,11 +8,17 @@ import "./login.css";
 
 const Login = () => {
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (localStorage.getItem("jwToken")) {
-  //     navigate("/dashboard");
-  //   }
-  // });
+  useEffect(() => {
+    if (localStorage.getItem("jwToken")) {
+      navigate("/dashboard");
+    }
+  });
+
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+
+  useNavigate(() => {
+    if (isAuthenticated) navigate("/dashboard");
+  });
 
   const dispatch = useDispatch();
 
