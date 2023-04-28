@@ -1,7 +1,16 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+body {
+  background: #ccd5ae;
+}
+
 .inner-dumpform-container {
+  font-family: "Roboto", sans-serif;
   width: 30%;
-  margin: 40px auto;
-  background: gold;
+  margin: 20px auto;
+  background: #bca099;
+  padding: 5px;
+  border-radius: 4px;
 }
 
 .inner-dumpform-container > div {
@@ -33,8 +42,38 @@
   border-radius: 5px;
 }
 
+.dumpform-heading {
+  text-align: center;
+  padding-top: 20px;
+}
+
 .fetch-dump {
   width: 30%;
   margin: 40px auto;
   background: antiquewhite;
+  display: flex;
+  /* padding: 10px 0px; */
+}
+
+.fetch-dump button {
+  flex: 1;
+  height: 30px;
+}
+
+.fetch-dump input {
+  flex: 3;
+  padding: 0px 5px;
+  font-size: 15px;
+}
+
+.dump-form-btn {
+  text-align: center;
+  padding: 10px;
+}
+
+.dump-form-btn button {
+  height: 35px;
+  width: 80px;
+  border-radius: 5px;
+  border: none;
 }

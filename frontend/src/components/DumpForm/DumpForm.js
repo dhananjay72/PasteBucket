@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { postDump, deleteDump } from "../../features/dumpSlice";
-import { loaduser } from "../../features/userSlice";
+import { deleteDump } from "../../features/dumpSlice";
+// import {  } from "../../features/userSlice";
+import { postDump, loaduser } from "../../features/userSlice";
 import "./DumpForm.css";
 
 const DumpForm = () => {
@@ -11,7 +12,7 @@ const DumpForm = () => {
   const User = useSelector((state) => state.user.username);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && localStorage.getItem("jwToken") ) {
       dispatch(loaduser());
     }
   });
@@ -32,6 +33,9 @@ const DumpForm = () => {
 
   return (
     <div className="dumpform-container">
+      <div className="dumpform-heading">
+        <h2>Create a new dump</h2>
+      </div>
       <div className="inner-dumpform-container">
         <div>
           <label htmlFor="title">Title</label> <br />
@@ -74,16 +78,15 @@ const DumpForm = () => {
             />
           </div>
         </div>
-        <div>
+        <div className="dump-form-btn">
           <button onClick={() => dispatch(postDump({ dumpInput, User }))}>
             Post
           </button>
-          <button onClick={() => dispatch(deleteDump({ id: "bKFobi" }))}>
+          {/* <button onClick={() => dispatch(deleteDump({ id: "bKFobi" }))}>
             Delete
-          </button>
+          </button> */}
         </div>
       </div>
-
       <div className="fetch-dump">
         <input type="text" />
         <button>Fetch</button>

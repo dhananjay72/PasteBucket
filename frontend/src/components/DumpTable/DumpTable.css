@@ -1,7 +1,8 @@
 table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 100%;
+  width: 80%;
+  margin: 0px auto;
 }
 
 td,
@@ -14,3 +15,23 @@ th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
+/* thead th:nth-child(1) {
+  width: 20%;
+}
+
+thead th:nth-child(2) {
+  width: 35%;
+}
+
+thead th:nth-child(3) {
+  width: 15%;
+}
+
+thead th:nth-child(4) {
+  width: 15%;
+}
+
+thead th:nth-child(5) {
+  width: 15%;
+} */

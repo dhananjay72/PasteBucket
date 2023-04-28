@@ -94,6 +94,7 @@ router.get("/:slug", CheckForToken, async (req, res) => {
 // TO get all dump of the user:
 // Testing pending
 router.get("/", auth, async (req, res) => {
+  console.log("exe");
   try {
     const dumps = await Dump.find({ user: req.user.id }).sort({
       updatedAt: -1,

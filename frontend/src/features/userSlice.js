@@ -1,5 +1,6 @@
 // State storing loggedin user information
 import axios from "axios";
+import { redirect } from "react-router-dom";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -57,6 +58,25 @@ export const loaduser = createAsyncThunk("user/info", async (payload) => {
   // return res;
 });
 
+export const postDump = createAsyncThunk("dump/post", async (payload, user) => {
+  // console.log(payload);
+  const { title, description, access, date } = payload.dumpInput;
+  // console.log(user);
+  // console.log(payload.dumpInput);
+
+  const dump = {
+    title,
+    text: description,
+    expiration_date: date,
+    access,
+    user: payload.User,
+  };
+  console.log(dump);
+
+  const res = await axios.post("/api/d", { ...dump });
+  return res.data.dump;
+});
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -103,6 +123,17 @@ export const userSlice = createSlice({
 
       state.dumps = [...action.payload.dumps];
       state.isAuthenticated = true;
+    },
+    [loaduser.rejected]: (state, action) => {
+      console.log("rejected");
+      localStorage.removeItem("jwToken");
+      window.location.replace("http://localhost:3000/login");
+    },
+
+    // post dump :
+    [postDump.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      state.dumps.push(action.payload);
     },
   },
 });

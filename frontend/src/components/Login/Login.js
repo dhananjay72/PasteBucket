@@ -58,7 +58,7 @@ const Login = () => {
           onChange={handleInput}
         />
       </div>
-      <div>
+      <div className="input-btn">
         <button onClick={() => dispatch(login({ input }))}>Login</button>
       </div>
     </div>

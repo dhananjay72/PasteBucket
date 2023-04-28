@@ -5,7 +5,7 @@ module.exports = function (req, res, next) {
   // Get token from header
 
   const token = req.header("x-auth-token");
-  // console.log(token);
+  console.log(token);
   if (!token) {
     return res
       .status(401)
@@ -16,6 +16,7 @@ module.exports = function (req, res, next) {
   try {
     jwt.verify(token, process.env.JWT_PASSWORD, (error, decoded) => {
       if (error) {
+        console.log(error);
         return res
           .status(401)
           .json({ errors: [{ msg: "Token is not valid" }] });

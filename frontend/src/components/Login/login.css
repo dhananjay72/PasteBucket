@@ -4,7 +4,7 @@
   background: #f6f5f7;
 }
 
-button {
+.input-btn button {
   border-radius: 20px;
   border: 1px solid #ff4b2b;
   background-color: #ff4b2b;
@@ -17,15 +17,15 @@ button {
   /* transition: transform 80ms ease-in; */
 }
 
-button:active {
+.input-btn button:active {
   transform: scale(0.95);
 }
 
-button:focus {
+.input-btn button:focus {
   outline: none;
 }
 
-button.ghost {
+.input-btn button.ghost {
   background-color: transparent;
   border-color: #ffffff;
 }
@@ -45,4 +45,8 @@ button.ghost {
 .login-form-heading,
 .login-form-input {
   text-align: center;
+}
+
+a {
+  text-decoration: none;
 }
