@@ -1,7 +1,14 @@
-.form {
-  width: 30%;
-  margin: 0px auto;
+.login-form {
+  width: 25%;
+  margin: 60px auto;
   background: #f6f5f7;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.input-btn {
+  text-align: center;
+  margin: 10px 0px;
 }
 
 .input-btn button {
@@ -14,7 +21,7 @@
   padding: 12px 45px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  /* transition: transform 80ms ease-in; */
+  transition: transform 80ms ease-in;
 }
 
 .input-btn button:active {
@@ -35,7 +42,7 @@
   border: none;
   padding: 12px 15px;
   margin: 8px 0;
-  width: 60%;
+  width: 70%;
 }
 
 .login-form-heading {

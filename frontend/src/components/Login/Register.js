@@ -8,11 +8,17 @@ import "./register.css";
 
 const Register = () => {
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   if (localStorage.getItem("jwToken")) {
-  //     navigate("/dashboard");
-  //   }
-  // });
+  useEffect(() => {
+    if (localStorage.getItem("jwToken")) {
+      navigate("/dashboard");
+    }
+  });
+
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+
+  useNavigate(() => {
+    if (isAuthenticated) navigate("/dashboard");
+  });
 
   const dispatch = useDispatch();
 
@@ -37,7 +43,7 @@ const Register = () => {
   };
 
   return (
-    <div className="form">
+    <div className="login-form">
       <div className="login-form-heading">
         <h2>Register</h2>
       </div>
@@ -77,7 +83,7 @@ const Register = () => {
           onChange={handleInput}
         />
       </div>
-      <div>
+      <div className="input-btn">
         <button onClick={register}>Register</button>
       </div>
     </div>

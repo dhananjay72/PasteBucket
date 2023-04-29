@@ -24,7 +24,7 @@ const Navbar = () => {
         <Link to="/">Pastify</Link>
       </div>
       <div className="item2">
-        <Link to="register">Sign Up</Link>
+        {!isAuthenticated && <Link to="register">Sign Up</Link>}
       </div>
       <div className="item3">
         <h1>{isAuthenticated}</h1>

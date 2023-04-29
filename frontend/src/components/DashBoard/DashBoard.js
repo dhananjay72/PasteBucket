@@ -13,10 +13,6 @@ const DashBoard = () => {
     <>
       <DumpForm></DumpForm>
       <DumpTable></DumpTable>
-      <h1>{user}</h1>
-      <h1>{user}</h1>
-      <button onClick={() => dispatch(loaduser())}>Login</button>
-      <button onClick={() => dispatch(inc())}>Login</button>
     </>
   );
 };

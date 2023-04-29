@@ -76,4 +76,6 @@ body {
   width: 80px;
   border-radius: 5px;
   border: none;
+  background: #3498db;
+  color: white;
 }
