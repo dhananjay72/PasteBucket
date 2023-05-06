@@ -1,6 +1,6 @@
 // State storing loggedin user information
 import axios from "axios";
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { redirect } from "react-router-dom";
 
 const initialState = {
@@ -11,6 +11,21 @@ const initialState = {
   dumps: [],
   dump: {},
 };
+
+export const getSingleDump = createAsyncThunk(
+  "user/getSingleDump",
+  async (payload) => {
+    console.log(payload);
+    const { slug } = payload;
+    const url = `/api/d/${slug}`;
+    const res = await axios.get(url);
+    const data = res.data;
+
+    console.log(res.data);
+    return res.data;
+    // return { isAuthenticated: true, username: Username, email: Email, dumps };
+  }
+);
 
 export const dumpSlice = createSlice({
   name: "user",
@@ -49,10 +64,9 @@ export const dumpSlice = createSlice({
       });
       console.log(res.data);
     },
-    getDump: (state, { payload }) => {},
   },
 });
 
-export const { postDump, deleteDump, getDump } = dumpSlice.actions;
+export const { postDump, deleteDump } = dumpSlice.actions;
 
 export default dumpSlice.reducer;

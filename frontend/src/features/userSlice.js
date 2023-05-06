@@ -97,6 +97,7 @@ export const userSlice = createSlice({
   },
 
   extraReducers: {
+    // Login user:
     [login.fulfilled]: (state, action) => {
       console.log(action.payload);
       state.isAuthenticated = action.payload.isAuthenticated;
@@ -105,6 +106,7 @@ export const userSlice = createSlice({
       state.dumps = action.payload.dumps;
       state.cnt += 1;
     },
+    // registerUser
     [registerUser.fulfilled]: (state, action) => {
       console.log("registration successful");
       // console.log(action.payload);
@@ -115,6 +117,7 @@ export const userSlice = createSlice({
       localStorage.setItem("jwToken", token);
     },
 
+    // LoadUser:
     [loaduser.fulfilled]: (state, action) => {
       console.log(action.payload);
       console.log("is getting executed");

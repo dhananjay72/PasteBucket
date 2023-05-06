@@ -71,6 +71,8 @@ router.post("/", async (req, res) => {
 router.get("/:slug", CheckForToken, async (req, res) => {
   try {
     const dump = await Dump.findOne({ slug: req.params.slug });
+    console.log(req.params.slug);
+    console.log(dump);
 
     if (!dump) {
       return res.status(404).json({ errors: [{ msg: "Dump not fund" }] });
@@ -80,9 +82,9 @@ router.get("/:slug", CheckForToken, async (req, res) => {
       if (!req.user) {
         return res.status(404).json({ errors: [{ msg: "Dump not found" }] });
       }
-      if (dump.user.id.toString() !== req.user.id) {
-        return res.status(404).json({ errors: [{ msg: "Dump not found" }] });
-      }
+      // if (dump.user.id.toString() !== req.user.id) {
+      //   return res.status(404).json({ errors: [{ msg: "Dump not found" }] });
+      // }
     }
 
     return res.json(dump);

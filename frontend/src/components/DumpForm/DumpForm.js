@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteDump } from "../../features/dumpSlice";
 // import {  } from "../../features/userSlice";
 import { postDump, loaduser } from "../../features/userSlice";
+import { getSingleDump } from "../../features/dumpSlice";
 import "./DumpForm.css";
 
 const DumpForm = () => {
@@ -12,7 +13,7 @@ const DumpForm = () => {
   const User = useSelector((state) => state.user.username);
 
   useEffect(() => {
-    if (!isAuthenticated && localStorage.getItem("jwToken") ) {
+    if (!isAuthenticated && localStorage.getItem("jwToken")) {
       dispatch(loaduser());
     }
   });
@@ -81,6 +82,9 @@ const DumpForm = () => {
         <div className="dump-form-btn">
           <button onClick={() => dispatch(postDump({ dumpInput, User }))}>
             Post
+          </button>
+          <button onClick={() => dispatch(getSingleDump({ slug: "SOWi43" }))}>
+            DD
           </button>
           {/* <button onClick={() => dispatch(deleteDump({ id: "bKFobi" }))}>
             Delete

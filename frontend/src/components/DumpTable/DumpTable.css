@@ -2,7 +2,7 @@ table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 80%;
-  margin: 0px auto;
+  margin: 20px auto;
 }
 
 td,
@@ -12,11 +12,24 @@ th {
   padding: 8px;
 }
 
-tr:nth-child(even) {
+tr:nth-child(odd) {
   background-color: #dddddd;
 }
 
-/* thead th:nth-child(1) {
+tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+tr:hover {
+  background-color: #d0d0d0;
+  cursor: pointer;
+}
+
+th {
+  background: #8f8f8f;
+}
+
+thead th:nth-child(1) {
   width: 20%;
 }
 
@@ -34,4 +47,11 @@ thead th:nth-child(4) {
 
 thead th:nth-child(5) {
   width: 15%;
-} */
+}
+
+.delete-columns,
+.date-column,
+.url-column,
+.table-heading {
+  text-align: center;
+}
