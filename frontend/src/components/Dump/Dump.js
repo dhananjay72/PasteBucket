@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-
+import { formatDistance, subDays } from "date-fns";
 import "./Dump.css";
 import { Person, Clock, Lock, Unlock, Trash3 } from "react-bootstrap-icons";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,22 +13,40 @@ const Dump = () => {
     const url = window.location.href;
     console.log(url.split("d/")[1]);
     dispatch(getSingleDump({ slug: url.split("d/")[1] }));
-  });
+  }, []);
+
+  const dump = useSelector((state) => state.dump.dump);
 
   return (
     <div className="single-dump-container">
       <div className="single-dump-heading">
-        <h2>hello</h2>
+        <h2>{dump.title}</h2>
       </div>
-      <div className="single-dump-info"></div>
-      <div className="single-dump-text">
-        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam
-        voluptates accusamus, atque tenetur facilis amet omnis? Dignissimos
-        nostrum exercitationem rem officiis illo vel ut laboriosam quibusdam
-        tempore voluptate dolore numquam, eaque asperiores iure nihil dolores
-        corporis culpa laborum? Cumque enim necessitatibus mollitia asperiores
-        doloremque nihil omnis. Voluptas iste illo molestias!
+      <div className="single-dump-info">
+        <ul>
+          <li>
+            <Clock />{" "}
+            {formatDistance(new Date(dump.createdAt), new Date(), {
+              addSuffix: true,
+            })}
+          </li>
+          <li>
+            <Trash3 /> Expires in
+            {` ${
+              formatDistance(new Date(), new Date(dump.createdAt), {
+                addSuffix: true,
+              }).split("about ")[1]
+            }`}
+          </li>
+          <li>
+            <Person /> {dump.user}
+          </li>
+          <li>
+            <Lock /> Private
+          </li>
+        </ul>
       </div>
+      <div className="single-dump-text">{dump.text}</div>
     </div>
   );
 };

@@ -11,18 +11,16 @@ const initialState = {
   jwt: null,
   dumps: [],
   cnt: 0,
+  errorMessage: null,
 };
 
 export const login = createAsyncThunk("user/login", async (payload) => {
-  console.log("Dispatching login action");
-
-  console.log("fdfd");
   const { email, password } = payload.input;
   const res = await axios.post("/api/auth", { email, password });
   const { email: Email, username: Username } = res.data.user;
   const token = res.data.token;
   const dumps = res.data.dumps;
-  console.log(res.data);
+
   localStorage.setItem("jwToken", token);
 
   return { isAuthenticated: true, username: Username, email: Email, dumps };
@@ -30,20 +28,23 @@ export const login = createAsyncThunk("user/login", async (payload) => {
 
 export const registerUser = createAsyncThunk(
   "user/register",
-  async (payload) => {
-    const { username, email, password } = payload.input;
-    const res = await axios.post("api/users", {
-      username,
-      email,
-      password,
-    });
+  async (payload, { rejectWithValue }) => {
+    try {
+      const { username, email, password } = payload.input;
+      const res = await axios.post("api/users", {
+        username,
+        email,
+        password,
+      });
 
-    return res.data;
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.error.message);
+    }
   }
 );
 
 export const loaduser = createAsyncThunk("user/info", async (payload) => {
-  console.log("hello ");
   const token = localStorage.getItem("jwToken");
 
   const res = await axios.get("/api/d", {
@@ -51,7 +52,7 @@ export const loaduser = createAsyncThunk("user/info", async (payload) => {
       "X-Auth-Token": token,
     },
   });
-  // console.log(res.data);
+
   const { user, dumps } = res.data;
 
   return { user, dumps };
@@ -59,10 +60,7 @@ export const loaduser = createAsyncThunk("user/info", async (payload) => {
 });
 
 export const postDump = createAsyncThunk("dump/post", async (payload, user) => {
-  // console.log(payload);
   const { title, description, access, date } = payload.dumpInput;
-  // console.log(user);
-  // console.log(payload.dumpInput);
 
   const dump = {
     title,
@@ -71,7 +69,6 @@ export const postDump = createAsyncThunk("dump/post", async (payload, user) => {
     access,
     user: payload.User,
   };
-  console.log(dump);
 
   const res = await axios.post("/api/d", { ...dump });
   return res.data.dump;
@@ -94,12 +91,16 @@ export const userSlice = createSlice({
       state.jwt = null;
       state.dumps = [];
     },
+
+    setErrorMessage: (state, { payload }) => {
+      console.log(payload);
+      state.errorMessage = payload.message;
+    },
   },
 
   extraReducers: {
     // Login user:
     [login.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.isAuthenticated = action.payload.isAuthenticated;
       state.username = action.payload.username;
       state.email = action.payload.email;
@@ -108,8 +109,6 @@ export const userSlice = createSlice({
     },
     // registerUser
     [registerUser.fulfilled]: (state, action) => {
-      console.log("registration successful");
-      // console.log(action.payload);
       state.username = action.payload.user.username;
       state.email = action.payload.user.email;
       state.isAuthenticated = true;
@@ -117,30 +116,29 @@ export const userSlice = createSlice({
       localStorage.setItem("jwToken", token);
     },
 
+    [registerUser.rejected]: (state, action) => {
+      state.errorMessage = action.payload;
+    },
+
     // LoadUser:
     [loaduser.fulfilled]: (state, action) => {
-      console.log(action.payload);
-      console.log("is getting executed");
-      console.log(action.payload.user);
       state.username = action.payload.user;
 
       state.dumps = [...action.payload.dumps];
       state.isAuthenticated = true;
     },
     [loaduser.rejected]: (state, action) => {
-      console.log("rejected");
       localStorage.removeItem("jwToken");
       window.location.replace("http://localhost:3000/login");
     },
 
     // post dump :
     [postDump.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.dumps.push(action.payload);
     },
   },
 });
 
-export const { logout, inc } = userSlice.actions;
+export const { logout, inc, setErrorMessage } = userSlice.actions;
 
 export default userSlice.reducer;

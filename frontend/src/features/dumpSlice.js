@@ -65,6 +65,12 @@ export const dumpSlice = createSlice({
       console.log(res.data);
     },
   },
+
+  extraReducers: {
+    [getSingleDump.fulfilled]: (state, action) => {
+      state.dump = action.payload;
+    },
+  },
 });
 
 export const { postDump, deleteDump } = dumpSlice.actions;

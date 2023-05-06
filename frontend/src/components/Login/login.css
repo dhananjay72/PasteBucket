@@ -57,3 +57,11 @@
 a {
   text-decoration: none;
 }
+
+.error-message {
+  color: red;
+  text-align: center;
+  padding: 10px;
+  /* border: 1px solid red; */
+  font-weight: 400;
+}

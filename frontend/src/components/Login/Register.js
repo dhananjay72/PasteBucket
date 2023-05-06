@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, registerUser } from "../../features/userSlice";
+import { login, registerUser, setErrorMessage } from "../../features/userSlice";
 import { Link } from "react-router-dom";
 import { redirect, useNavigate } from "react-router-dom";
 
@@ -15,6 +15,7 @@ const Register = () => {
   });
 
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const errorMessage = useSelector((state) => state.user.errorMessage);
 
   useNavigate(() => {
     if (isAuthenticated) navigate("/dashboard");
@@ -39,7 +40,43 @@ const Register = () => {
 
   const register = () => {
     console.log(input);
+
+    if (input.username.length < 5) {
+      dispatch(
+        setErrorMessage({
+          message: "Username must be at least 5 characters long.",
+        })
+      );
+      return;
+    }
+
+    if (!validateEmail(input.email)) {
+      dispatch(
+        setErrorMessage({
+          message: "Invalid email address",
+        })
+      );
+      return;
+    }
+
+    if (input.cpassword !== input.password) {
+      dispatch(
+        setErrorMessage({
+          message: "Passwords do not match",
+        })
+      );
+      return;
+    }
+
     dispatch(registerUser({ input }));
+  };
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
   };
 
   return (
@@ -83,6 +120,7 @@ const Register = () => {
           onChange={handleInput}
         />
       </div>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <div className="input-btn">
         <button onClick={register}>Register</button>
       </div>

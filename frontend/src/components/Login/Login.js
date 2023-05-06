@@ -59,6 +59,7 @@ const Login = () => {
           onChange={handleInput}
         />
       </div>
+      <div className="error-message">Invalid credentials</div>
       <div className="input-btn">
         <button onClick={() => dispatch(login({ input }))}>Login</button>
       </div>

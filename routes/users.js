@@ -16,11 +16,19 @@ router.post("/", async (req, res) => {
     const tempEmail = await User.findOne({ email: email });
 
     if (tempUser) {
-      return res.send("usrname already exist");
+      return res.status(500).json({
+        error: {
+          message: "username already exists",
+        },
+      });
     }
 
     if (tempEmail) {
-      return res.send("Email already eixsts.");
+      return res.status(500).json({
+        error: {
+          message: "Email already exists",
+        },
+      });
     }
 
     let user = { username, email, password };
