@@ -5,8 +5,10 @@ require("dotenv").config();
 const connectDB = require("./db/connect");
 const users = require("./routes/users");
 const dumps = require("./routes/Dumps");
-
+const cors = require("cors");
 // Middleware
+
+app.use(express.json());
 app.use(express.json({ extended: false }));
 
 connectDB(process.env.MONGO_URI);

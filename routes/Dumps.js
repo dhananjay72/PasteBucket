@@ -86,7 +86,7 @@ router.get("/:slug", CheckForToken, async (req, res) => {
       //   return res.status(404).json({ errors: [{ msg: "Dump not found" }] });
       // }
     }
-
+    console.log("ok");
     return res.json(dump);
   } catch (err) {
     return res.status(500).json({ msg: "Server Error" });

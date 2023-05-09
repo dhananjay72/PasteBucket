@@ -12,6 +12,7 @@ const initialState = {
   dumps: [],
   cnt: 0,
   errorMessage: null,
+  postCreatedInSession: 0,
 };
 
 export const login = createAsyncThunk("user/login", async (payload) => {
@@ -54,9 +55,7 @@ export const loaduser = createAsyncThunk("user/info", async (payload) => {
   });
 
   const { user, dumps } = res.data;
-
   return { user, dumps };
-  // return res;
 });
 
 export const postDump = createAsyncThunk("dump/post", async (payload, user) => {
@@ -73,6 +72,20 @@ export const postDump = createAsyncThunk("dump/post", async (payload, user) => {
   const res = await axios.post("/api/d", { ...dump });
   return res.data.dump;
 });
+
+export const deleteDump = createAsyncThunk(
+  "user/deleteDump",
+  async (payload) => {
+    const id = payload.id;
+    const res = await axios.delete(`/api/d/${id}`, {
+      headers: {
+        "X-Auth-Token": localStorage.getItem("jwToken"),
+      },
+    });
+
+    return id;
+  }
+);
 
 export const userSlice = createSlice({
   name: "user",
@@ -93,7 +106,6 @@ export const userSlice = createSlice({
     },
 
     setErrorMessage: (state, { payload }) => {
-      console.log(payload);
       state.errorMessage = payload.message;
     },
   },
@@ -135,6 +147,21 @@ export const userSlice = createSlice({
     // post dump :
     [postDump.fulfilled]: (state, action) => {
       state.dumps.push(action.payload);
+      state.postCreatedInSession = state.postCreatedInSession + 1;
+    },
+
+    [deleteDump.fulfilled]: (state, action) => {
+      const id = action.payload;
+
+      let index = -1;
+
+      for (let i = 0; i < state.dumps.length; i++) {
+        if (state.dumps[i].slug === id) {
+          index = i;
+          break;
+        }
+      }
+      if (index !== -1) state.dumps.splice(index, 1);
     },
   },
 });

@@ -13,9 +13,11 @@ const Dump = () => {
     const url = window.location.href;
     console.log(url.split("d/")[1]);
     dispatch(getSingleDump({ slug: url.split("d/")[1] }));
+    console.log(dump);
   }, []);
 
   const dump = useSelector((state) => state.dump.dump);
+  console.log(dump);
 
   return (
     <div className="single-dump-container">
@@ -25,24 +27,18 @@ const Dump = () => {
       <div className="single-dump-info">
         <ul>
           <li>
-            <Clock />{" "}
-            {formatDistance(new Date(dump.createdAt), new Date(), {
-              addSuffix: true,
-            })}
+            <Clock /> {dump.newCreatedAT}
           </li>
           <li>
-            <Trash3 /> Expires in
-            {` ${
-              formatDistance(new Date(), new Date(dump.createdAt), {
-                addSuffix: true,
-              }).split("about ")[1]
-            }`}
+            <Trash3 /> Expires {dump.newExpiryDate}
           </li>
           <li>
             <Person /> {dump.user}
           </li>
           <li>
-            <Lock /> Private
+            <Lock />
+            {dump.access === "UNL" && "Public"}
+            {dump.access !== "UNL" && "Private"}
           </li>
         </ul>
       </div>

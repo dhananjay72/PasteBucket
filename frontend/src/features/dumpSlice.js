@@ -2,6 +2,7 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { redirect } from "react-router-dom";
+import { formatDistance, subDays } from "date-fns";
 
 const initialState = {
   isAuthenticated: false,
@@ -10,6 +11,7 @@ const initialState = {
   jwt: null,
   dumps: [],
   dump: {},
+  postCreatedInSession: 0,
 };
 
 export const getSingleDump = createAsyncThunk(
@@ -24,6 +26,20 @@ export const getSingleDump = createAsyncThunk(
     console.log(res.data);
     return res.data;
     // return { isAuthenticated: true, username: Username, email: Email, dumps };
+  }
+);
+
+export const deleteDump = createAsyncThunk(
+  "user/deleteDump",
+  async (payload) => {
+    const id = payload.id;
+    const res = await axios.delete(`/api/d/${id}`, {
+      headers: {
+        "X-Auth-Token": localStorage.getItem("jwToken"),
+      },
+    });
+    console.log(res.data);
+    return id;
   }
 );
 
@@ -48,31 +64,47 @@ export const dumpSlice = createSlice({
       const res = await axios.post("/api/d", { ...dump });
       state.dump = res.data.dump;
     },
-    deleteDump: async (state, { payload }) => {
-      const id = payload.id;
-      const config = {
-        headers: {
-          "x-auth-token": localStorage.getItem("jwToken"),
-        },
-      };
-      // console.log(localStorage.getItem("jwToken"));
-
-      const res = await axios.delete(`/api/d/${id}`, {
-        headers: {
-          "X-Auth-Token": localStorage.getItem("jwToken"),
-        },
-      });
-      console.log(res.data);
+    incrementDump: (state) => {
+      state.postCreatedInSession = state.postCreatedInSession + 1;
     },
   },
 
   extraReducers: {
     [getSingleDump.fulfilled]: (state, action) => {
       state.dump = action.payload;
+      console.log(action.payload.expiration_date);
+
+      const newExpiryDate = ` ${formatDistance(
+        new Date(action.payload.expiration_date),
+        new Date(),
+        {
+          addSuffix: true,
+        }
+      )}`;
+
+      const newCreatedAT = formatDistance(
+        new Date(action.payload.createdAt),
+        new Date(),
+        {
+          addSuffix: true,
+        }
+      );
+
+      state.dump = { ...state.dump, newExpiryDate, newCreatedAT };
+    },
+
+    [deleteDump.fulfilled]: (state, action) => {
+      const id = action.payload;
+      console.log(id);
+      const index = state.dumps.findIndex((ele) => ele.slug === id);
+      console.log(index);
+      if (index !== -1) {
+        state.dumps.splice(index, 1);
+      }
     },
   },
 });
 
-export const { postDump, deleteDump } = dumpSlice.actions;
+export const { postDump, incrementDump } = dumpSlice.actions;
 
 export default dumpSlice.reducer;

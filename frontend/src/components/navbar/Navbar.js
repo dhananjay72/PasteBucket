@@ -6,6 +6,7 @@ import { logout } from "../../features/userSlice";
 
 const Navbar = () => {
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const user = useSelector((state) => state.user.username);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -23,8 +24,10 @@ const Navbar = () => {
       <div className="item1">
         <Link to="/">Pastify</Link>
       </div>
+      {isAuthenticated && <div className="item-heading">Welcome {user}</div>}
       <div className="item2">
         {!isAuthenticated && <Link to="register">Sign Up</Link>}
+        {isAuthenticated && <Link to="dashboard">Dashboard</Link>}
       </div>
       <div className="item3">
         <h1>{isAuthenticated}</h1>

@@ -88,3 +88,30 @@ body {
   background: #3498db;
   color: white;
 }
+
+.dump-form-btn button:hover {
+  cursor: pointer;
+  background: #388cc4;
+}
+
+.posted-dump {
+  /* text-align: center; */
+  border: 1px solid black;
+  /* width: 40%; */
+  margin: 0px auto;
+  margin-top: 20px;
+  padding: 10px 0px;
+  display: flex;
+  background: white;
+}
+
+.posted-dump-item1 {
+  flex: 1;
+  padding-left: 10px;
+}
+
+.posted-dump-item2 {
+  flex: 10;
+
+  height: 100%;
+}

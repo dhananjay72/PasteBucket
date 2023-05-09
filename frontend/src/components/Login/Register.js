@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, registerUser, setErrorMessage } from "../../features/userSlice";
 import { Link } from "react-router-dom";
 import { redirect, useNavigate } from "react-router-dom";
+import MuiAlert from "@mui/material/Alert";
 
+import Snackbar from "@mui/material/Snackbar";
 import "./register.css";
 
 const Register = () => {
@@ -69,6 +71,7 @@ const Register = () => {
     }
 
     dispatch(registerUser({ input }));
+    handleClick();
   };
 
   const validateEmail = (email) => {
@@ -78,6 +81,28 @@ const Register = () => {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       );
   };
+  const [open, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
+
+  // const postDumpHandler = (slug) => {
+  //   dispatch(deleteDump({ id: slug }));
+  //   handleClick();
+  // };
 
   return (
     <div className="login-form">
@@ -124,6 +149,17 @@ const Register = () => {
       <div className="input-btn">
         <button onClick={register}>Register</button>
       </div>
+
+      <Snackbar
+        open={open}
+        autoHideDuration={4000}
+        onClose={handleClose}
+        message="Note archived"
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+          User Registered Successfully
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
