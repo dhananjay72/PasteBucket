@@ -8,6 +8,7 @@ const dumps = require("./routes/Dumps");
 const cors = require("cors");
 // Middleware
 
+app.use(cors());
 app.use(express.json());
 app.use(express.json({ extended: false }));
 

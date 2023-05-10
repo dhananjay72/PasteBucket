@@ -17,15 +17,11 @@ const initialState = {
 export const getSingleDump = createAsyncThunk(
   "user/getSingleDump",
   async (payload) => {
-    console.log(payload);
     const { slug } = payload;
     const url = `/api/d/${slug}`;
     const res = await axios.get(url);
     const data = res.data;
-
-    console.log(res.data);
     return res.data;
-    // return { isAuthenticated: true, username: Username, email: Email, dumps };
   }
 );
 
@@ -38,7 +34,6 @@ export const deleteDump = createAsyncThunk(
         "X-Auth-Token": localStorage.getItem("jwToken"),
       },
     });
-    console.log(res.data);
     return id;
   }
 );
@@ -49,8 +44,6 @@ export const dumpSlice = createSlice({
   reducers: {
     postDump: async (state, { payload }) => {
       const { title, description, access, date } = payload.dumpInput;
-      console.log(payload.User);
-      console.log(payload.dumpInput);
 
       const dump = {
         title,
@@ -59,7 +52,6 @@ export const dumpSlice = createSlice({
         access,
         user: payload.User,
       };
-      console.log(dump);
 
       const res = await axios.post("/api/d", { ...dump });
       state.dump = res.data.dump;
@@ -72,7 +64,6 @@ export const dumpSlice = createSlice({
   extraReducers: {
     [getSingleDump.fulfilled]: (state, action) => {
       state.dump = action.payload;
-      console.log(action.payload.expiration_date);
 
       const newExpiryDate = ` ${formatDistance(
         new Date(action.payload.expiration_date),
@@ -95,9 +86,7 @@ export const dumpSlice = createSlice({
 
     [deleteDump.fulfilled]: (state, action) => {
       const id = action.payload;
-      console.log(id);
       const index = state.dumps.findIndex((ele) => ele.slug === id);
-      console.log(index);
       if (index !== -1) {
         state.dumps.splice(index, 1);
       }

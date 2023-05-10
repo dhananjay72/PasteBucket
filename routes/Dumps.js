@@ -24,8 +24,6 @@ const getUniqueId = () => {
 // Create new dump
 // Testing done, able to post from the frontend
 router.post("/", async (req, res) => {
-  console.log(req.body);
-
   const { title, text, password, access, expiration_date, user } = req.body;
 
   let dump = {};
@@ -37,16 +35,12 @@ router.post("/", async (req, res) => {
     dump.expiration_date = expiration_date;
   }
 
-  // console.log("hello from post route", req.body);
   try {
     if (user) {
-      // console.log("I am executing");
       dump.user = user;
     } else {
       dump.user = process.env.DEFAULT_USER_ID;
     }
-
-    console.log(dump);
 
     // creating random unique url:
     let id = getUniqueId();
@@ -57,10 +51,8 @@ router.post("/", async (req, res) => {
     dump.slug = id;
 
     dump = await Dump.create(dump);
-    console.log(dump);
     res.json({ dump });
   } catch (error) {
-    console.log(error);
     res.json({ error });
   }
 });
@@ -71,8 +63,6 @@ router.post("/", async (req, res) => {
 router.get("/:slug", CheckForToken, async (req, res) => {
   try {
     const dump = await Dump.findOne({ slug: req.params.slug });
-    console.log(req.params.slug);
-    console.log(dump);
 
     if (!dump) {
       return res.status(404).json({ errors: [{ msg: "Dump not fund" }] });
@@ -86,7 +76,7 @@ router.get("/:slug", CheckForToken, async (req, res) => {
       //   return res.status(404).json({ errors: [{ msg: "Dump not found" }] });
       // }
     }
-    console.log("ok");
+
     return res.json(dump);
   } catch (err) {
     return res.status(500).json({ msg: "Server Error" });
@@ -96,7 +86,6 @@ router.get("/:slug", CheckForToken, async (req, res) => {
 // TO get all dump of the user:
 // Testing pending
 router.get("/", auth, async (req, res) => {
-  console.log("exe");
   try {
     const dumps = await Dump.find({ user: req.user.id }).sort({
       updatedAt: -1,
@@ -117,14 +106,12 @@ router.get("/", auth, async (req, res) => {
 
 router.delete("/:id", auth, async (req, res) => {
   try {
-    console.log(req.params.id);
     const dump = await Dump.findOne({ slug: req.params.id });
 
     if (!dump) {
       return res.status(404).json({ msg: "Dump not found" });
     }
 
-    console.log(dump.user.toString(), req.user.id);
     // if (dump.user.toString() !== req.user.id) {
     //   if (dump.access === "PVT") {
     //     return res.status(404).json({ msg: "Dump not found" });
@@ -132,7 +119,6 @@ router.delete("/:id", auth, async (req, res) => {
     //   return res.status(401).json({ msg: "You cannot delete the dump" });
     // }
     await Dump.findOneAndDelete({ slug: req.params.id });
-    console.log("deleted");
     return res.json({ msg: "post deleted" });
   } catch (err) {
     console.error(err.message);

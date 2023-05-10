@@ -35,9 +35,6 @@ router.post("/", async (req, res) => {
       updatedAt: -1,
     });
 
-    console.log(dumps);
-    console.log(user.id);
-
     const payload = {
       user: {
         id: user.username,
