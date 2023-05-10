@@ -3,6 +3,7 @@ import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { redirect } from "react-router-dom";
 import { formatDistance, subDays } from "date-fns";
+import apiURL from "../Constants/apiurl";
 
 const initialState = {
   isAuthenticated: false,
@@ -18,7 +19,7 @@ export const getSingleDump = createAsyncThunk(
   "user/getSingleDump",
   async (payload) => {
     const { slug } = payload;
-    const url = `/api/d/${slug}`;
+    const url = `${apiURL}/api/d/${slug}`;
     const res = await axios.get(url);
     const data = res.data;
     return res.data;
@@ -29,7 +30,7 @@ export const deleteDump = createAsyncThunk(
   "user/deleteDump",
   async (payload) => {
     const id = payload.id;
-    const res = await axios.delete(`/api/d/${id}`, {
+    const res = await axios.delete(`${apiURL}/api/d/${id}`, {
       headers: {
         "X-Auth-Token": localStorage.getItem("jwToken"),
       },

@@ -3,6 +3,7 @@ import axios from "axios";
 import { redirect } from "react-router-dom";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import apiURL from "../Constants/apiurl";
 
 const initialState = {
   isAuthenticated: false,
@@ -17,7 +18,7 @@ const initialState = {
 
 export const login = createAsyncThunk("user/login", async (payload) => {
   const { email, password } = payload.input;
-  const res = await axios.post("/api/auth", { email, password });
+  const res = await axios.post(`${apiURL}/api/auth`, { email, password });
   const { email: Email, username: Username } = res.data.user;
   const token = res.data.token;
   const dumps = res.data.dumps;
@@ -32,7 +33,7 @@ export const registerUser = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const { username, email, password } = payload.input;
-      const res = await axios.post("api/users", {
+      const res = await axios.post(`${apiURL}/api/users`, {
         username,
         email,
         password,
@@ -48,7 +49,7 @@ export const registerUser = createAsyncThunk(
 export const loaduser = createAsyncThunk("user/info", async (payload) => {
   const token = localStorage.getItem("jwToken");
 
-  const res = await axios.get("/api/d", {
+  const res = await axios.get(`${apiURL}/api/d`, {
     headers: {
       "X-Auth-Token": token,
     },
@@ -69,7 +70,7 @@ export const postDump = createAsyncThunk("dump/post", async (payload, user) => {
     user: payload.User,
   };
 
-  const res = await axios.post("/api/d", { ...dump });
+  const res = await axios.post(`${apiURL}/api/d`, { ...dump });
   return res.data.dump;
 });
 
@@ -77,7 +78,7 @@ export const deleteDump = createAsyncThunk(
   "user/deleteDump",
   async (payload) => {
     const id = payload.id;
-    const res = await axios.delete(`/api/d/${id}`, {
+    const res = await axios.delete(`${apiURL}/api/d/${id}`, {
       headers: {
         "X-Auth-Token": localStorage.getItem("jwToken"),
       },
